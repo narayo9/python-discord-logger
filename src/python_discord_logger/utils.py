@@ -3,7 +3,8 @@ __all__ = ["get_discord_logger"]
 import logging
 import typing
 
-from src.python_discord_logger import DiscordFormatter, DiscordWebhookHandler
+from .formatters import DiscordFormatter
+from .handlers import DiscordWebhookHandler
 
 
 def get_discord_logger(

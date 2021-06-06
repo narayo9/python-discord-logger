@@ -1,9 +1,10 @@
+__all__ = ["DiscordFormatter"]
+
 import logging
 import typing
+import traceback
 from logging import LogRecord
 
-
-__all__ = ["DiscordFormatter"]
 
 LEVEL_TO_EMOJI = {
     logging.DEBUG: "white_check_mark",
@@ -19,7 +20,16 @@ class DiscordFormatter(logging.Formatter):
         self.user_id_to_alert = user_id_to_alert
 
     def format(self, record: LogRecord) -> str:
-        return (
-            f":{LEVEL_TO_EMOJI[record.levelno]}: **{record.levelname}**{f' <@{self.user_id_to_alert}>'if record.levelno >= logging.ERROR else ''}\n"
-            f">>> {record.msg}"
-        )
+        header = f":{LEVEL_TO_EMOJI[record.levelno]}: **{record.levelname}**"
+        if record.levelno >= logging.ERROR:
+            header += f" <@{self.user_id_to_alert}>"
+
+        header += '\n'
+
+        body = f"> {record.msg}\n"
+
+        if record.exc_info:
+            _, exc, _ = record.exc_info
+            body += f"```{traceback.format_exc()}```"
+
+        return header + body
