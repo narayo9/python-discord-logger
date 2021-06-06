@@ -1,7 +1,7 @@
 import logging
 import os
 
-from logger.utils import get_discord_logger
+from src.logger.utils import get_discord_logger
 
 
 def initialize_logger() -> logging.Logger:
